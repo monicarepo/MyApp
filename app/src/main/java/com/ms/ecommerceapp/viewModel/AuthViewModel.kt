@@ -1,0 +1,61 @@
+package com.ms.ecommerceapp.viewModel
+
+
+import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.ms.ecommerceapp.SignInActivity
+import com.ms.ecommerceapp.SignUpActivity
+
+class AuthViewModel: ViewModel() {
+    val auth = Firebase.auth
+
+    fun signIn(email: String, password: String, activity: SignInActivity?, context: Context) {
+        println("Email: $email, Password: $password")
+            auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    //navigate to home screen.
+                    activity?.navigateToSignUp()
+                } else {
+                    val exception = task.exception.toString()
+                    Toast.makeText(
+                        context,
+                        exception,
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+    fun createAccount(email: String, password: String, activity: SignUpActivity?, context: Context) {
+        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user = auth.currentUser
+                //navigate to home screen.
+                Toast.makeText(
+                    context,
+                    "Account created successfully ${user?.email}",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                val resultIntent = Intent()
+                resultIntent.putExtra("email", user?.email)
+                resultIntent.putExtra("password", password)
+                activity?.setResult(RESULT_OK, resultIntent)
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            } else {
+                val exception = task.exception.toString()
+                println("User Creation Failed $exception")
+                Toast.makeText(
+                    context,
+                    exception,
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
+    }
+}

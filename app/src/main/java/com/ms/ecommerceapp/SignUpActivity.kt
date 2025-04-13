@@ -1,13 +1,11 @@
 package com.ms.ecommerceapp
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +25,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,10 +49,9 @@ import com.ms.ecommerceapp.ui.theme.primary
 import com.ms.ecommerceapp.ui.theme.white
 import com.ms.ecommerceapp.viewModel.AuthViewModel
 
-class SignInActivity : ComponentActivity() {
+class SignUpActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
-    var onEmailResult: ((String) -> Unit)? = null
-    var onPasswordResult: ((String) -> Unit)? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,36 +60,16 @@ class SignInActivity : ComponentActivity() {
         setContent {
             EcommerceAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize(), containerColor = gray40) { innerPadding ->
-                    SignInScreen(modifier = Modifier.padding(innerPadding))
+                    SignUpScreen(modifier = Modifier.padding(innerPadding))
                 }
-            }
-        }
-    }
-
-    fun navigateToSignUp() {
-        val intent = Intent(this, SignUpActivity::class.java)
-        signInLauncher.launch(intent)
-    }
-
-    private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        result ->
-        if (result.resultCode == RESULT_OK) {
-            val data = result.data
-            val email = data?.getStringExtra("email")
-            val password = data?.getStringExtra("password")
-            println("Email: $email, Password: $password")
-            email?.let {
-                onEmailResult?.invoke(it)
-            }
-            password?.let {
-                onPasswordResult?.invoke(it)
             }
         }
     }
 }
 
+
 @Composable
-fun SignInScreen(modifier: Modifier = Modifier) {
+fun SignUpScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -101,27 +77,22 @@ fun SignInScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SignInContent()
+        SignUpContent()
     }
 }
 
 @Composable
-fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
+fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var isNameFocused by remember { mutableStateOf(false) }
     var isEmailFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
+    var isConfirmPasswordFocused by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val activity = context as? SignInActivity
-
-    LaunchedEffect(Unit) {
-        activity?.onEmailResult = { resultEmail ->
-            email = resultEmail
-        }
-        activity?.onPasswordResult = { resultPassword ->
-            password = resultPassword
-        }
-    }
+    val activity = context as? SignUpActivity
 
     Card(
         colors = CardDefaults.cardColors(
@@ -131,13 +102,43 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             .border(2.dp, Color.White, shape = MaterialTheme.shapes.medium)
     ) {
         Text(
-            text = stringResource(R.string.sign_in),
+            text = stringResource(R.string.sign_up),
             modifier = Modifier
                 .padding(vertical = 24.dp)
                 .align(Alignment.CenterHorizontally),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
+        Text(
+            text = stringResource(R.string.name),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp)
+        )
+
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            placeholder = { Text(stringResource(R.string.enter_name)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    isNameFocused = focusState.isFocused
+                },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                cursorColor = if (isNameFocused) Color.Blue else Color.Black,
+                focusedBorderColor = if (isNameFocused) Color.Black else Color.Gray,
+                unfocusedBorderColor = if (isNameFocused) Color.Black else Color.Gray
+            ),
+            shape = RoundedCornerShape(8.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = stringResource(R.string.email),
@@ -169,7 +170,7 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             shape = RoundedCornerShape(8.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             stringResource(R.string.password),
@@ -178,6 +179,7 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
                 .padding(bottom = 8.dp)
                 .align(Alignment.Start)
         )
+
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -200,45 +202,71 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             shape = RoundedCornerShape(8.dp),
             visualTransformation = PasswordVisualTransformation(),
 
+            )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            stringResource(R.string.confirmPass),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp)
+                .align(Alignment.Start)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            placeholder = { Text(stringResource(R.string.confirmPass)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    isConfirmPasswordFocused = focusState.isFocused
+                },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                cursorColor = if (isConfirmPasswordFocused) Color.Blue else Color.Black,
+                focusedBorderColor = if (isConfirmPasswordFocused) Color.Black else Color.Gray,
+                unfocusedBorderColor = if (isConfirmPasswordFocused) Color.Black else Color.Gray
+            ),
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = PasswordVisualTransformation(),
+
+            )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = { /* Handle sign in */
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    viewModel.signIn(email, password, activity, context)
+            onClick = { /* Handle sign in
+            Add validation for email and password here */
+                if (email.isNotEmpty() && password.isNotEmpty() && (password == confirmPassword)) {
+                    onSignUpClick(email, password, activity, context, viewModel)
                 }
             },
             modifier = Modifier
-                .padding(bottom = 16.dp)
+                .padding(bottom = 24.dp)
                 .align(Alignment.CenterHorizontally),
             colors = ButtonDefaults.buttonColors(
                 containerColor = primary,
                 contentColor = white
             )
         ) {
-            Text(stringResource(R.string.sign_in))
+            Text(stringResource(R.string.sign_up))
         }
-
-        Text(
-            text = stringResource(R.string.new_account),
-            modifier = Modifier
-                .padding(16.dp)
-                .padding(bottom = 24.dp)
-                .align(Alignment.CenterHorizontally)
-                .clickable {
-                    activity?.navigateToSignUp()
-                },
-            color = primary
-        )
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun SignInScreenPreview() {
-//    EcommerceAppTheme {
-//        SignInScreen()
-//    }
-//}
+fun onSignUpClick(
+    email: String,
+    password: String,
+    activity: SignUpActivity?,
+    context: Context,
+    viewModel: AuthViewModel
+) {
+    println("Email: $email, Password: $password")
+    viewModel.createAccount(email, password, activity, context)
+}
