@@ -37,11 +37,7 @@ class AuthViewModel: ViewModel() {
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 //navigate to home screen.
-                Toast.makeText(
-                    context,
-                    "Account created successfully ${user?.email}",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                showToast("Account created successfully ${user?.email}",context)
                 val resultIntent = Intent()
                 resultIntent.putExtra("email", user?.email)
                 resultIntent.putExtra("password", password)
@@ -49,13 +45,13 @@ class AuthViewModel: ViewModel() {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             } else {
                 val exception = task.exception.toString()
-                println("User Creation Failed $exception")
-                Toast.makeText(
-                    context,
-                    exception,
-                    Toast.LENGTH_SHORT,
-                ).show()
+                showToast(exception,context)
             }
         }
     }
+}
+
+fun showToast(message: String, context: Context) {
+    println("Toast Message: $message")
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

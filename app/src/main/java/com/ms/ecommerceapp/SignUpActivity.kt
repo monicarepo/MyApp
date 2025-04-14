@@ -2,6 +2,7 @@ package com.ms.ecommerceapp
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -91,6 +92,15 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
     var isEmailFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
     var isConfirmPasswordFocused by remember { mutableStateOf(false) }
+    var isNameError by remember { mutableStateOf(false) }
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
+    var isConfirmPasswordError by remember { mutableStateOf(false) }
+    var nameErrorText by remember { mutableStateOf("Name cannot be empty") }
+    var emailErrorText by remember { mutableStateOf("Email cannot be empty") }
+    var passwordErrorText by remember { mutableStateOf("Password cannot be empty") }
+    var confirmPasswordErrorText by remember { mutableStateOf("Confirm Password cannot be empty") }
+    val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
     val context = LocalContext.current
     val activity = context as? SignUpActivity
 
@@ -118,12 +128,22 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
 
         OutlinedTextField(
             value = name,
-            onValueChange = { name = it },
+            onValueChange = { name = it
+                            isNameError = when {
+                                name.isEmpty() -> {
+                                    nameErrorText = "Name cannot be empty"
+                                    true
+                                }
+                                else -> {
+                                    nameErrorText = ""
+                                    false
+                                }
+                            }
+                            },
             placeholder = { Text(stringResource(R.string.enter_name)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isNameFocused = focusState.isFocused
@@ -135,8 +155,18 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
                 focusedBorderColor = if (isNameFocused) Color.Black else Color.Gray,
                 unfocusedBorderColor = if (isNameFocused) Color.Black else Color.Gray
             ),
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(8.dp),
+            isError = isNameError
         )
+
+        if (isNameError) {
+            Text(
+                text = nameErrorText,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -144,18 +174,33 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
             text = stringResource(R.string.email),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
                 .padding(bottom = 8.dp)
                 .align(Alignment.Start),
         )
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { email = it
+                            isEmailError = when {
+                                email.isEmpty() -> {
+                                    emailErrorText = "Email cannot be empty"
+                                    true
+                                }
+                                !email.matches(emailRegex) -> {
+                                    emailErrorText = "Invalid email format"
+                                    true
+                                }
+                                else -> {
+                                    emailErrorText = ""
+                                    false
+                                }
+                            }
+                            },
             placeholder = { Text(stringResource(R.string.enter_email)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isEmailFocused = focusState.isFocused
@@ -167,27 +212,51 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
                 focusedBorderColor = if (isEmailFocused) Color.Black else Color.Gray,
                 unfocusedBorderColor = if (isEmailFocused) Color.Black else Color.Gray
             ),
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(8.dp),
+            isError = isEmailError
         )
-
+        if (isEmailError) {
+            Text(
+                text = emailErrorText,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             stringResource(R.string.password),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
                 .padding(bottom = 8.dp)
                 .align(Alignment.Start)
         )
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                            isPasswordError = when {
+                                password.isEmpty() -> {
+                                    passwordErrorText = "Password cannot be empty"
+                                    true
+                                }
+                                password.length < 6 -> {
+                                    passwordErrorText = "Password must be at least 6 characters"
+                                    true
+                                }
+                                else -> {
+                                    passwordErrorText = ""
+                                    false
+                                }
+                            }
+
+                            },
             placeholder = { Text(stringResource(R.string.enter_pass)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isPasswordFocused = focusState.isFocused
@@ -201,27 +270,49 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
             ),
             shape = RoundedCornerShape(8.dp),
             visualTransformation = PasswordVisualTransformation(),
-
+            isError = isPasswordError
             )
-
+            if (isPasswordError) {
+                Text(
+                    text = passwordErrorText,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             stringResource(R.string.confirmPass),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
                 .padding(bottom = 8.dp)
                 .align(Alignment.Start)
         )
 
         OutlinedTextField(
             value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            onValueChange = { confirmPassword = it
+                isConfirmPasswordError = when {
+                    it.isEmpty() -> {
+                        confirmPasswordErrorText = "Confirm password cannot be empty"
+                        true
+                    }
+                    it != password -> {
+                        confirmPasswordErrorText = "Password and confirm password do not match"
+                        true
+                    }
+                    else -> {
+                        confirmPasswordErrorText = ""
+                        false
+                    }
+                }
+                            },
             placeholder = { Text(stringResource(R.string.confirmPass)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isConfirmPasswordFocused = focusState.isFocused
@@ -235,19 +326,47 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
             ),
             shape = RoundedCornerShape(8.dp),
             visualTransformation = PasswordVisualTransformation(),
+            isError = isConfirmPasswordError
 
             )
 
+            if (isConfirmPasswordError) {
+                Text(
+                    text = confirmPasswordErrorText,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
             onClick = { /* Handle sign in
             Add validation for email and password here */
-                if (email.isNotEmpty() && password.isNotEmpty() && (password == confirmPassword)) {
+                if(name.isEmpty() && email.isEmpty() && password.isEmpty() && confirmPassword.isEmpty()){
+                    isNameError = true
+                    isEmailError = true
+                    isPasswordError = true
+                    isConfirmPasswordError = true
+                }
+                else if (name.isEmpty()) {
+                    isNameError = true
+                } else if (email.isEmpty()) {
+                    isEmailError = true
+                } else if (password.isEmpty() || password.length < 6) {
+                    isPasswordError = true
+                } else if (confirmPassword.isEmpty() || confirmPassword != password) {
+                    isConfirmPasswordError = true
+                    confirmPasswordErrorText = "Password and confirm password does not match"
+                } else {
                     onSignUpClick(email, password, activity, context, viewModel)
                 }
+//                if (email.isNotEmpty() && password.isNotEmpty() && (password == confirmPassword)) {
+//                    onSignUpClick(email, password, activity, context, viewModel
+//                }
             },
             modifier = Modifier
+                .padding(top = 8.dp)
                 .padding(bottom = 24.dp)
                 .align(Alignment.CenterHorizontally),
             colors = ButtonDefaults.buttonColors(

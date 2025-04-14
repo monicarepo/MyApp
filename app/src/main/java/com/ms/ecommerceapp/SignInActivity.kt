@@ -111,6 +111,11 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
     var password by remember { mutableStateOf("") }
     var isEmailFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
+    var emailErrorText by remember { mutableStateOf("Email cannot be empty") }
+    var passwordErrorText by remember { mutableStateOf("Password cannot be empty") }
+    val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
     val context = LocalContext.current
     val activity = context as? SignInActivity
 
@@ -149,12 +154,26 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { email = it
+                            isEmailError = when {
+                                email.isEmpty() -> {
+                                    emailErrorText = "Email cannot be empty"
+                                    true
+                                }
+                                !email.matches(emailRegex) -> {
+                                    emailErrorText = "Invalid email format"
+                                    true
+                                }
+                                else -> {
+                                    emailErrorText = ""
+                                    false
+                                }
+                            }
+                            },
             placeholder = { Text(stringResource(R.string.enter_email)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isEmailFocused = focusState.isFocused
@@ -168,6 +187,14 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             ),
             shape = RoundedCornerShape(8.dp)
         )
+        if (isEmailError) {
+            Text(
+                text = emailErrorText,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -175,17 +202,28 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             stringResource(R.string.password),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
                 .padding(bottom = 8.dp)
                 .align(Alignment.Start)
         )
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                            isPasswordError = when {
+                                password.isEmpty() -> {
+                                    passwordErrorText = "Password cannot be empty"
+                                    true
+                                }
+                               else -> {
+                                    passwordErrorText = ""
+                                    false
+                               }
+                            }
+                            },
             placeholder = { Text(stringResource(R.string.enter_pass)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isPasswordFocused = focusState.isFocused
@@ -201,13 +239,25 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             visualTransformation = PasswordVisualTransformation(),
 
         )
-
+        if (isPasswordError) {
+            Text(
+                text = passwordErrorText,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = { /* Handle sign in */
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    viewModel.signIn(email, password, activity, context)
+                if (email.isEmpty() && password.isEmpty()) {
+                    isEmailError = true
+                    isPasswordError = true
+                } else {
+                    if (isEmailError && isPasswordError) {
+                        viewModel.signIn(email, password, activity, context)
+                    }
                 }
             },
             modifier = Modifier
