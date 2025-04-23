@@ -75,6 +75,12 @@ class SignInActivity : ComponentActivity() {
         signInLauncher.launch(intent)
     }
 
+    fun navigateToHome() {
+//        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, DashboardActivity::class.java)
+        startActivity(intent)
+    }
+
     private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result ->
         if (result.resultCode == RESULT_OK) {
@@ -107,8 +113,8 @@ fun SignInScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("moni@gmail.com") }
+    var password by remember { mutableStateOf("123456") }
     var isEmailFocused by remember { mutableStateOf(false) }
     var isPasswordFocused by remember { mutableStateOf(false) }
     var isEmailError by remember { mutableStateOf(false) }
@@ -255,7 +261,7 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
                     isEmailError = true
                     isPasswordError = true
                 } else {
-                    if (isEmailError && isPasswordError) {
+                    if (!isEmailError && !isPasswordError) {
                         viewModel.signIn(email, password, activity, context)
                     }
                 }
@@ -278,7 +284,8 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
                 .padding(bottom = 24.dp)
                 .align(Alignment.CenterHorizontally)
                 .clickable {
-                    activity?.navigateToSignUp()
+                    //activity?.navigateToSignUp()
+                    activity?.navigateToHome()
                 },
             color = primary
         )

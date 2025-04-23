@@ -16,11 +16,12 @@ class AuthViewModel: ViewModel() {
 
     fun signIn(email: String, password: String, activity: SignInActivity?, context: Context) {
         println("Email: $email, Password: $password")
+        activity?.navigateToHome()
             auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     //navigate to home screen.
-                    activity?.navigateToSignUp()
+                    activity?.navigateToHome()
                 } else {
                     val exception = task.exception.toString()
                     Toast.makeText(
