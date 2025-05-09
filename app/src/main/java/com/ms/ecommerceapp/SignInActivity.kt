@@ -41,15 +41,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.ms.ecommerceapp.ui.theme.EcommerceAppTheme
-import com.ms.ecommerceapp.ui.theme.gray40
-import com.ms.ecommerceapp.ui.theme.primary
-import com.ms.ecommerceapp.ui.theme.white
+import com.ms.apptheme.ui.theme.AppTheme
+import com.ms.apptheme.ui.theme.onPrimaryContainerLight
+import com.ms.apptheme.ui.theme.primaryLight
 import com.ms.ecommerceapp.viewModel.AuthViewModel
 
 class SignInActivity : ComponentActivity() {
@@ -62,8 +62,8 @@ class SignInActivity : ComponentActivity() {
         enableEdgeToEdge()
         auth = Firebase.auth
         setContent {
-            EcommerceAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(), containerColor = gray40) { innerPadding ->
+            AppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize(), containerColor = primaryLight) { innerPadding ->
                     SignInScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -77,8 +77,7 @@ class SignInActivity : ComponentActivity() {
 
     fun navigateToHome() {
 //        val intent = Intent(this, HomeActivity::class.java)
-        val intent = Intent(this, DashboardActivity::class.java)
-        startActivity(intent)
+//        startActivity(intent)
     }
 
     private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -135,11 +134,11 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
     }
 
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = white,
-        ),
-        modifier = Modifier
-            .border(2.dp, Color.White, shape = MaterialTheme.shapes.medium)
+//        colors = CardDefaults.cardColors(
+//            containerColor = onPrimaryContainerLight,
+//        ),
+//        modifier = Modifier
+//            .border(2.dp, Color.White, shape = MaterialTheme.shapes.medium)
     ) {
         Text(
             text = stringResource(R.string.sign_in),
@@ -184,13 +183,13 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
                 .onFocusChanged { focusState ->
                     isEmailFocused = focusState.isFocused
                 },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                cursorColor = if (isEmailFocused) Color.Blue else Color.Black,
-                focusedBorderColor = if (isEmailFocused) Color.Black else Color.Gray,
-                unfocusedBorderColor = if (isEmailFocused) Color.Black else Color.Gray
-            ),
+//            colors = OutlinedTextFieldDefaults.colors(
+//                focusedTextColor = Color.Black,
+//                unfocusedTextColor = Color.Black,
+//                cursorColor = if (isEmailFocused) Color.Blue else Color.Black,
+//                focusedBorderColor = if (isEmailFocused) Color.Black else Color.Gray,
+//                unfocusedBorderColor = if (isEmailFocused) Color.Black else Color.Gray
+//            ),
             shape = RoundedCornerShape(8.dp)
         )
         if (isEmailError) {
@@ -269,10 +268,10 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = primary,
-                contentColor = white
-            )
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = primaryDark,
+//                contentColor = onPrimaryContainerLight
+//            )
         ) {
             Text(stringResource(R.string.sign_in))
         }
@@ -284,18 +283,17 @@ fun SignInContent(viewModel: AuthViewModel = AuthViewModel()) {
                 .padding(bottom = 24.dp)
                 .align(Alignment.CenterHorizontally)
                 .clickable {
-                    //activity?.navigateToSignUp()
-                    activity?.navigateToHome()
+                    activity?.navigateToSignUp()
                 },
-            color = primary
+//            color = primaryDark
         )
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun SignInScreenPreview() {
-//    EcommerceAppTheme {
-//        SignInScreen()
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun SignInScreenPreview() {
+    AppTheme {
+        SignInScreen()
+    }
+}

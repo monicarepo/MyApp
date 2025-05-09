@@ -2,7 +2,6 @@ package com.ms.ecommerceapp
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,15 +38,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.ms.ecommerceapp.ui.theme.EcommerceAppTheme
-import com.ms.ecommerceapp.ui.theme.gray40
-import com.ms.ecommerceapp.ui.theme.primary
-import com.ms.ecommerceapp.ui.theme.white
+import com.ms.apptheme.ui.theme.AppTheme
+import com.ms.apptheme.ui.theme.primaryLight
 import com.ms.ecommerceapp.viewModel.AuthViewModel
 
 class SignUpActivity : ComponentActivity() {
@@ -59,8 +57,8 @@ class SignUpActivity : ComponentActivity() {
         enableEdgeToEdge()
         auth = Firebase.auth
         setContent {
-            EcommerceAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(), containerColor = gray40) { innerPadding ->
+            AppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize(), containerColor = primaryLight) { innerPadding ->
                     SignUpScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -68,7 +66,7 @@ class SignUpActivity : ComponentActivity() {
     }
 }
 
-
+@Preview
 @Composable
 fun SignUpScreen(modifier: Modifier = Modifier) {
     Column(
@@ -105,11 +103,11 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
     val activity = context as? SignUpActivity
 
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = white,
-        ),
-        modifier = Modifier
-            .border(2.dp, Color.White, shape = MaterialTheme.shapes.medium)
+//        colors = CardDefaults.cardColors(
+//            containerColor = onPrimaryContainerLight,
+//        ),
+//        modifier = Modifier
+//            .border(2.dp, Color.White, shape = MaterialTheme.shapes.medium)
     ) {
         Text(
             text = stringResource(R.string.sign_up),
@@ -361,18 +359,15 @@ fun SignUpContent(viewModel: AuthViewModel = AuthViewModel()) {
                 } else {
                     onSignUpClick(email, password, activity, context, viewModel)
                 }
-//                if (email.isNotEmpty() && password.isNotEmpty() && (password == confirmPassword)) {
-//                    onSignUpClick(email, password, activity, context, viewModel
-//                }
             },
             modifier = Modifier
                 .padding(top = 8.dp)
                 .padding(bottom = 24.dp)
                 .align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = primary,
-                contentColor = white
-            )
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = primary,
+//                contentColor = white
+//            )
         ) {
             Text(stringResource(R.string.sign_up))
         }
