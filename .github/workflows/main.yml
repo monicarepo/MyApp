@@ -73,36 +73,37 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
+      - name: Create and Start Emulator
+        run: |
+          echo "Creating Android Emulator"
+          # Create a new AVD (Android Virtual Device)
+          echo "no" | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"
+          # Start the emulator in the background
+          emulator -avd test -no-window -no-snapshot -no-boot-anim -gpu off &
+          # Wait for the emulator to boot
+          timeout=60  # Timeout for the emulator to start (in seconds)
+          while [[ $timeout -gt 0 ]]; do
+            adb devices | grep emulator && break
+            timeout=$((timeout - 5))
+            sleep 5
+          done
+          if [[ $timeout -le 0 ]]; then
+            echo "❌ Emulator failed to boot within the time limit"
+            exit 1
+          else
+            echo "✅ Emulator booted successfully"
+          fi
+
       - name: Run espresso tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           arch: arm64-v8a
           profile: Nexus 6
-#          script: ./gradlew connectedCheck
+          script: ./gradlew connectedCheck
           disable-animations: true
           emulator-options: -no-snapshot -no-boot-anim -no-window -no-gpu -accel off -noaudio
 
-      - name: Create and Start Emulator
-        run: |
-            echo "Creating Android Emulator"
-            # Create a new AVD (Android Virtual Device)
-            echo "no" | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"
-            # Start the emulator in the background
-            emulator -avd test -no-window -no-snapshot -no-boot-anim -gpu off &
-            # Wait for the emulator to boot
-            timeout=60  # Timeout for the emulator to start (in seconds)
-            while [[ $timeout -gt 0 ]]; do
-              adb devices | grep emulator && break
-              timeout=$((timeout - 5))
-              sleep 5
-            done
-            if [[ $timeout -le 0 ]]; then
-              echo "❌ Emulator failed to boot within the time limit"
-              exit 1
-            else
-              echo "✅ Emulator booted successfully"
-            fi
 
 #      - name: Wait for emulator to boot
 #        run: |
@@ -129,9 +130,6 @@ jobs:
 #            else
 #              echo "✅ Emulator connected: $DEVICES"
 #            fi
-
-      - name: Run Espresso tests
-        run: ./gradlew connectedCheck
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
