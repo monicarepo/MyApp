@@ -77,6 +77,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
+          arch: x86_64
+          profile: pixel
           script: ./gradlew connectedCheck
           disable-animations: true
           emulator-options: -no-snapshot-save -no-boot-anim -no-window -gpu swiftshader_indirect
