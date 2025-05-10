@@ -57,13 +57,27 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
+      - name: Set up Android SDK
+        uses: reactivecircus/setup-android@v2
+        with:
+          api-level: 29
+          build-tools: 29.0.2
+          target: google_apis
+          arch: arm64-v8a  # Use ARM architecture
+
+      - name: Install Android SDK Command-Line Tools and Emulator
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "tools" "platform-tools" "emulator" "system-images;android-29;google_apis;armeabi-v7a" "cmdline-tools;latest"
+
       - name: Create and Start Emulator
         run: |
           echo "Creating Android Emulator"
-          # Create a new AVD (Android Virtual Device)
-          echo "no" | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86_64"
+          # Create the AVD with ARM architecture
+          echo "no" | avdmanager create avd -n test -k "system-images;android-29;google_apis;armeabi-v7a"
           # Start the emulator in the background
           emulator -avd test -no-window -no-snapshot -no-boot-anim -gpu off &
+
           # Wait for the emulator to boot
           timeout=60  # Timeout for the emulator to start (in seconds)
           while [[ $timeout -gt 0 ]]; do
@@ -78,16 +92,34 @@ jobs:
             echo "✅ Emulator booted successfully"
           fi
 
-      - name: Run espresso tests
+      - name: Decode google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          mkdir -p app
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
+
+      - name: Run Espresso tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           target: google_apis
-          arch: x86_64
+          arch: arm64-v8a  # Use ARM architecture
           profile: Nexus 6
-          script: ./gradlew connectedCheck
+          script: ./gradlew connectedCheck   # The script to run after the emulator starts
           disable-animations: true
           emulator-options: -no-snapshot -no-boot-anim -no-window -no-gpu -accel off -noaudio
+
+#      - name: Run espresso tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 29
+#          target: google_apis
+#          arch: x86_64
+#          profile: Nexus 6
+#          script: ./gradlew connectedCheck
+#          disable-animations: true
+#          emulator-options: -no-snapshot -no-boot-anim -no-window -no-gpu -accel off -noaudio
 
 
 #      - name: Wait for emulator to boot
