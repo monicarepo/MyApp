@@ -53,6 +53,7 @@ jobs:
   instrumentation-test:
     needs: [unit-test]
     runs-on: macos-latest
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -91,13 +92,6 @@ jobs:
           else
             echo "✅ Emulator booted successfully"
           fi
-
-      - name: Decode google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: |
-          mkdir -p app
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
       - name: Run Espresso tests
         uses: reactivecircus/android-emulator-runner@v2
