@@ -67,10 +67,57 @@ jobs:
           profile: Nexus 6
           script: ./gradlew connectedCheck
           disable-animations: true
-          emulator-options: -no-snapshot -no-boot-anim -no-window -gpu off -no-audio -accel off -partition-size 2048
+          startup-timeout: 600  # Increased timeout (10 minutes)
+          emulator-options: >-
+            -no-snapshot
+            -no-boot-anim
+            -no-window
+            -gpu off
+            -no-audio
+            -accel off
+            -partition-size 2048
+            -delay-adb
+            -no-snapshot-save
+            -memory 2048
+            -cores 2
           pre-emulator-launch: |
+            echo "Starting ADB server..."
+            adb kill-server
+            adb start-server
             adb devices
             echo "Emulator about to start"
+          post-emulator-launch: |
+            echo "Waiting for device to be ready..."
+            adb wait-for-device
+            echo "Device found, waiting for boot completion..."
+            
+            # Wait for boot completion (up to 5 minutes)
+            timeout=300
+            while [[ $timeout -gt 0 ]]; do
+              boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null)
+              if [[ "$boot_completed" == "1" ]]; then
+                echo "Boot completed!"
+                break
+              fi
+              sleep 5
+              timeout=$((timeout - 5))
+              echo "Time remaining: $timeout seconds..."
+            done
+            
+            if [[ $timeout -le 0 ]]; then
+              echo "❌ Emulator failed to boot within time limit"
+              exit 1
+            fi
+            
+            echo "Disabling animations..."
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+            
+            echo "Device ready for tests!"
+          env:
+            ADB_INSTALL_TIMEOUT: 10
+            GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 
 #      - name: Wait for emulator to boot
