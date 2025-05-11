@@ -44,7 +44,8 @@ jobs:
 
   instrumentation-test:
 #    needs: [unit-test]
-    runs-on: macos-latest
+#    runs-on: macos-latest
+    runs-on: [self-hosted, macos]
 
     steps:
       - name: Checkout the code
