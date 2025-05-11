@@ -94,36 +94,6 @@ jobs:
             adb shell settings put global window_animation_scale 0
             adb shell settings put global transition_animation_scale 0
             adb shell settings put global animator_duration_scale 0
-          env:
-            ADB_INSTALL_TIMEOUT: 10
-            GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
-
-#      - name: Wait for emulator to boot
-#        run: |
-#          echo "Waiting for the emulator to boot..."
-#          timeout=60  # Maximum wait time in seconds
-#          while [[ $timeout -gt 0 ]]; do
-#            adb devices | grep emulator && break
-#            timeout=$((timeout - 5))
-#            sleep 5
-#          done
-#          if [[ $timeout -le 0 ]]; then
-#            echo "❌ Emulator failed to boot within the time limit"
-#            exit 1
-#          else
-#            echo "✅ Emulator booted successfully"
-#          fi
-
-#      - name: Check connected devices
-#        run: |
-#            DEVICES=$(adb devices | grep emulator | grep device)
-#            if [ -z "$DEVICES" ]; then
-#              echo "❌ No emulator connected!"
-#              exit 1
-#            else
-#              echo "✅ Emulator connected: $DEVICES"
-#            fi
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
