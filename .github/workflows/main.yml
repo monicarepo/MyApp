@@ -64,37 +64,37 @@ jobs:
           api-level: 35
           target: google_apis
           arch: arm64-v8a
-          profile: Nexus 6
-          working-directory: app
-          script: |
-              # Wait for emulator fully ready
-              adb wait-for-device
-              while [[ -z $(adb shell getprop sys.boot_completed 2>/dev/null) ]]; do
-                sleep 5
-                echo "Waiting for boot completion..."
-              done
-              echo "Emulator ready!"
-              ./gradlew connectedCheck
           disable-linux-hw-accel: true
           disable-animations: true
           emulator-options: >-
             -no-snapshot
             -no-boot-anim
             -no-window
-            -no-gpu  # Changed from -gpu off
             -no-audio
-            -accel off
-            -partition-size 2048
             -memory 2048
             -cores 2
-            -ports 5580,5581
-            -qemu -machine virt
-          pre-emulator-launch-script: |
-            echo "Starting ADB server..."
-            adb kill-server
-            adb start-server
-            adb devices
-            echo "Emulator about to start"
+            -partition-size 2048
+            
+#          script: |
+#            # Wait for emulator fully ready
+#            adb wait-for-device
+#            while [[ -z $(adb shell getprop sys.boot_completed 2>/dev/null) ]]; do
+#              sleep 5
+#              echo "Waiting for boot completion..."
+#            done
+#            echo "Emulator ready!"
+#            ./gradlew connectedCheck
+
+          script: |
+            adb wait-for-device
+            boot_completed=""
+            until [[ "$boot_completed" == "1" ]]; do
+            boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+            echo "Waiting for emulator to fully boot..."
+            sleep 5
+            done
+            echo "Emulator is ready!"
+            ./gradlew connectedCheck
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
