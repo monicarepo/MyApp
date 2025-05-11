@@ -87,6 +87,7 @@ jobs:
             -partition-size 2048
             -memory 2048
             -cores 2
+            -ports 5580,5581
             -qemu -machine virt
           pre-emulator-launch-script: |
             echo "Starting ADB server..."
