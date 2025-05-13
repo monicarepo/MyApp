@@ -62,6 +62,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.play.services.auth.api.phone)
     implementation(project(":appTheme"))
     implementation(project(":Authentication"))
     testImplementation(libs.junit)

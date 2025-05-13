@@ -1,7 +1,10 @@
 package com.ms.ecommerceapp
 
+
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -46,15 +49,19 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ms.apptheme.ui.theme.AppTheme
 import com.ms.apptheme.ui.theme.primaryLight
+import com.ms.ecommerceapp.network.NetworkManager
+import com.ms.ecommerceapp.receivers.WifiBroadcastReceiver
 import com.ms.ecommerceapp.viewModel.AuthViewModel
 
 class SignInActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     var onEmailResult: ((String) -> Unit)? = null
     var onPasswordResult: ((String) -> Unit)? = null
+    private val broadcastReceiver = WifiBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NetworkManager.initialize(this)
         enableEdgeToEdge()
         auth = Firebase.auth
         setContent {
@@ -66,7 +73,21 @@ class SignInActivity : ComponentActivity() {
         }
     }
 
+
+    override fun onStart() {
+        super.onStart()
+//        registerReceiver(broadcastReceiver, IntentFilter("android.net.wifi.WIFI_STATE_CHANGED"))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        unregisterReceiver(broadcastReceiver)
+        NetworkManager.unRegisterNetworkCallback()
+    }
+
     fun navigateToSignUp() {
+        val isOnline = NetworkManager.getConnectionStatus(this)
+        Log.d("NetworkManager", "Network Available: $isOnline")
         val intent = Intent(this, SignUpActivity::class.java)
         signInLauncher.launch(intent)
     }
