@@ -23,3 +23,4 @@ rootProject.name = "EcommerceApp"
 include(":app")
 include(":appTheme")
 include(":Authentication")
+include(":ApiMockData")

@@ -1,0 +1,7 @@
+[
+  { "user_id": 1, "username": "john_doe", "email": "john@example.com", "password": "hashed_password" },
+  { "user_id": 2, "username": "jane_smith", "email": "jane@example.com", "password": "hashed_password" },
+  { "user_id": 3, "username": "bob_johnson", "email": "bob@example.com", "password": "hashed_password" },
+  { "user_id": 4, "username": "susan_wilson", "email": "susan@example.com", "password": "hashed_password" },
+  { "user_id": 5, "username": "mike_anderson", "email": "mike@example.com", "password": "hashed_password" }
+]

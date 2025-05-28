@@ -1,0 +1,9 @@
+{
+  "order_id": 6,
+  "status": "Placed",
+  "message": "Order successfully placed.",
+  "Request Headers": {
+    "user_id": 1,
+    "items": [ { "product_id": 1, "quantity": 2 }, { "product_id": 3, "quantity": 1 } ]
+  }
+}

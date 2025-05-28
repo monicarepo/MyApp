@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    //Dependency Injection
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -39,6 +42,10 @@ android {
         compose = true
         viewBinding = true
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -64,13 +71,26 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.play.services.auth)
     implementation(libs.play.services.auth.api.phone)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.runtime)
+    testImplementation(libs.hilt.android.testing)
+    kapt(libs.hilt.android.compiler)
+
     implementation(project(":appTheme"))
     implementation(project(":Authentication"))
+    implementation(project(":ApiMockData"))
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.core)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.mockk)
+    testImplementation(libs.androidx.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

@@ -49,19 +49,27 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ms.apptheme.ui.theme.AppTheme
 import com.ms.apptheme.ui.theme.primaryLight
+import com.ms.ecommerceapp.dependencyInjection.DatabaseAdapter
+import com.ms.ecommerceapp.dependencyInjection.DatabaseService
 import com.ms.ecommerceapp.network.NetworkManager
 import com.ms.ecommerceapp.receivers.WifiBroadcastReceiver
 import com.ms.ecommerceapp.viewModel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignInActivity : ComponentActivity() {
-    private lateinit var auth: FirebaseAuth
+    lateinit var auth: FirebaseAuth
     var onEmailResult: ((String) -> Unit)? = null
     var onPasswordResult: ((String) -> Unit)? = null
     private val broadcastReceiver = WifiBroadcastReceiver()
+    //Hilt Implementation
+    @Inject lateinit var databaseAdapter: DatabaseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NetworkManager.initialize(this)
+        databaseAdapter.log("Hello Hilt")
         enableEdgeToEdge()
         auth = Firebase.auth
         setContent {
@@ -71,6 +79,11 @@ class SignInActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @Inject
+    fun directToDatabase(databaseService: DatabaseService) {
+        databaseService.log("Hello Hilt Method Injection Service")
     }
 
 
@@ -93,8 +106,8 @@ class SignInActivity : ComponentActivity() {
     }
 
     fun navigateToHome() {
-//        val intent = Intent(this, HomeActivity::class.java)
-//        startActivity(intent)
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){

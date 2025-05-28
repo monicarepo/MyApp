@@ -12,8 +12,12 @@ object NetworkManager {
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
     fun initialize(context: Context) {
-        connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
+        val service = context.getSystemService(Context.CONNECTIVITY_SERVICE)
+        connectivityManager = service as? ConnectivityManager
+        if (connectivityManager == null) {
+            Log.w("NetworkManager", "ConnectivityManager is null — test or mock context?")
+            return
+        }
         val request = NetworkRequest.Builder()
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
