@@ -1,8 +1,7 @@
-package com.ms.ecommerceapp
+package com.ms.ecommerceapp.activity
 
 
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -49,6 +48,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ms.apptheme.ui.theme.AppTheme
 import com.ms.apptheme.ui.theme.primaryLight
+import com.ms.ecommerceapp.R
 import com.ms.ecommerceapp.dependencyInjection.DatabaseAdapter
 import com.ms.ecommerceapp.dependencyInjection.DatabaseService
 import com.ms.ecommerceapp.network.NetworkManager

@@ -1,4 +1,4 @@
-package com.ms.ecommerceapp
+package com.ms.ecommerceapp.activity
 
 import android.content.Context
 import android.content.Intent

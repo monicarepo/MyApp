@@ -1,15 +1,17 @@
-package com.ms.ecommerceapp
+package com.ms.ecommerceapp.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import com.ms.apimockdata.Utility
 import com.ms.apimockdata.model.CartModel
 import com.ms.apimockdata.model.OrderDetailModel
 import com.ms.apimockdata.model.OrderModel
 import com.ms.apimockdata.model.ProductListModel
 import com.ms.apimockdata.model.UserListModel
+import com.ms.ecommerceapp.screens.MainScreen
 
-class HomeActivity: AppCompatActivity() {
+class HomeActivity: ComponentActivity() {
     lateinit var apiMockUtility: Utility
     var productList = ArrayList<ProductListModel>()
     var usersList = ArrayList<UserListModel>()
@@ -21,7 +23,10 @@ class HomeActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         apiMockUtility = Utility()
-        initialSetup()
+//        initialSetup()
+        setContent {
+            MainScreen()
+        }
     }
 
     private fun initialSetup() {

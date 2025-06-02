@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -74,6 +75,14 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.runtime)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.core)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+
     testImplementation(libs.hilt.android.testing)
     kapt(libs.hilt.android.compiler)
 

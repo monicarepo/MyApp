@@ -3,12 +3,12 @@ package com.ms.ecommerceapp // Should be in your test source set (e.g., app/src/
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.ms.ecommerceapp.activity.SignInActivity
+import com.ms.ecommerceapp.activity.SignUpActivity
 import com.ms.ecommerceapp.dependencyInjection.DatabaseAdapter
 import com.ms.ecommerceapp.network.NetworkManager
-import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -22,12 +22,9 @@ import io.mockk.verify
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner

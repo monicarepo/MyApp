@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.ms.ecommerceapp.SignInActivity
-import com.ms.ecommerceapp.SignUpActivity
+import com.ms.ecommerceapp.activity.SignInActivity
+import com.ms.ecommerceapp.activity.SignUpActivity
 
 class AuthViewModel: ViewModel() {
     val auth = Firebase.auth

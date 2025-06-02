@@ -23,4 +23,15 @@ data class CartItemModel (
     @SerializedName("quantity")
     var quantity: Int? = null,
 
+    @SerializedName("name")
+    var name: String? = null,
+
+    @SerializedName("price")
+    var price: String? = null,
+
+    @SerializedName("image")
+    var image: String? = null,
+
+
+
 )

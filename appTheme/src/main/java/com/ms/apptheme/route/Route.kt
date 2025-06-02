@@ -16,4 +16,11 @@ object Route {
             const val FORGOT_PASSWORD = "forgot-password"
         }
     }
+
+    object Dashboard {
+        const val ORDER_PLACED = "order_placed"
+        const val Home = "home"
+        const val Cart = "cart"
+        const val Account = "account"
+    }
 }
