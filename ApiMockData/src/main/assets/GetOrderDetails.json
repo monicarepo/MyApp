@@ -1,7 +1,41 @@
+[{
+  "order_id": 101,
+  "user_id": 1,
+  "status": "Delivered",
+  "total_price": 849.97,
+  "items": [
+    { "product_id": 1,
+      "quantity": 2,
+      "name": "Smartphone",
+      "price": "599.99",
+      "image": "https://img.freepik.com/free-vector/mobile-phone-isolated-white-background_1284-47076.jpg"
+    },
+    { "product_id": 3,
+      "quantity": 1,
+      "name": "Headphones",
+      "price": "649.99",
+      "image": "https://media.istockphoto.com/id/1372906882/photo/modern-blue-wireless-headphones-isolated-on-white-background-with-clipping-path.jpg?s=612x612&w=0&k=20&c=0k-2JFElEQ0QTvXsgtLx3i2JotQo_Eb8aEwyN-BOZjA="
+    }
+  ]
+},
 {
-  "order_id": 1,
+  "order_id": 102,
   "user_id": 1,
   "status": "Shipped",
   "total_price": 849.97,
-  "items": [ { "product_id": 1, "quantity": 2 }, { "product_id": 3, "quantity": 1 } ]
+  "items": [
+    { "product_id": 1,
+      "quantity": 2,
+      "name": "Western Dress",
+      "price": "599.99",
+      "image": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQvdCp1mHpK-TI8TF_qbsad2nOV3ah4tpSgs5bDsLjGSD0sVv6NjA6owQ4L2m-DpPSjOY3bLik-10CbijgL-ScS0IFIjQPIwA16SRVSBsLJR9msqMDehuW1jSRzA9twDe0K3RAOJ6w&usqp=CAc"
+    },
+    { "product_id": 3,
+      "quantity": 1,
+      "name": "Headphones",
+      "price": "649.99",
+      "image": "https://media.istockphoto.com/id/1372906882/photo/modern-blue-wireless-headphones-isolated-on-white-background-with-clipping-path.jpg?s=612x612&w=0&k=20&c=0k-2JFElEQ0QTvXsgtLx3i2JotQo_Eb8aEwyN-BOZjA="
+    }
+  ]
 }
+]

@@ -19,8 +19,17 @@ object Route {
 
     object Dashboard {
         const val ORDER_PLACED = "order_placed"
-        const val Home = "home"
-        const val Cart = "cart"
-        const val Account = "account"
+        const val HOME = "home"
+        const val CART = "cart"
+        const val ACCOUNT = "account"
+        const val MY_ORDERS = "my_orders"
+        const val WISHLIST = "wish_list"
+        const val SAVED_ADDRESS = "saved_address"
+        const val SETTINGS = "settings"
+        const val NOTIFICATION = "notification"
+        const val PRIVACY = "privacy"
+        const val ABOUT = "about"
+        const val SUPPORT = "support"
+        const val FAQ = "faq"
     }
 }

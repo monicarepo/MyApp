@@ -27,9 +27,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.ms.apimockdata.model.AccountOptionItem
+import com.ms.apptheme.route.Route
 
 @Composable
-fun AccountScreen() {
+fun AccountScreen(navController: NavHostController) {
+    val accountOptions = listOf(
+        AccountOptionItem(Icons.Default.Info, "My Orders", Route.Dashboard.MY_ORDERS),
+        AccountOptionItem(Icons.Default.Favorite, "Wishlist", Route.Dashboard.WISHLIST),
+        AccountOptionItem(Icons.Default.LocationOn, "Saved Addresses", Route.Dashboard.SAVED_ADDRESS),
+        AccountOptionItem(Icons.Default.Settings, "Settings", Route.Dashboard.SETTINGS)
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,12 +49,11 @@ fun AccountScreen() {
         ProfileHeader()
 
         Spacer(modifier = Modifier.height(24.dp))
-
-        AccountOption(icon = Icons.Default.Info, title = "My Orders")
-        AccountOption(icon = Icons.Default.Favorite, title = "Wishlist")
-        AccountOption(icon = Icons.Default.LocationOn, title = "Saved Addresses")
-        AccountOption(icon = Icons.Default.Settings, title = "Settings")
-
+        accountOptions.forEach { item ->
+            AccountOption(icon = item.icon, title = item.title) {
+                navController.navigate(item.route)
+            }
+        }
         Spacer(modifier = Modifier.weight(1f))
 
         LogoutButton()

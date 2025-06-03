@@ -3,7 +3,9 @@ package com.ms.apimockdata
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.ms.apimockdata.model.AddressModel
 import com.ms.apimockdata.model.CartModel
+import com.ms.apimockdata.model.NotificationItem
 import com.ms.apimockdata.model.OrderDetailModel
 import com.ms.apimockdata.model.OrderModel
 import com.ms.apimockdata.model.ProductListModel
@@ -38,13 +40,21 @@ class Utility {
         return gson.fromJson(jsonString, listType)
     }
 
-    fun getOrderDetails(context: Context): OrderDetailModel {
+    fun getOrderDetails(context: Context): ArrayList<OrderDetailModel> {
         val jsonString = context.assets.open("GetOrderDetails.json").bufferedReader().use {
             it.readText()
         }
-        val listType = object : TypeToken<OrderDetailModel>() {}.type
+        val listType = object : TypeToken<ArrayList<OrderDetailModel>>() {}.type
         return gson.fromJson(jsonString, listType)
     }
+
+//    fun getOrderDetails(context: Context): OrderDetailModel {
+//        val jsonString = context.assets.open("GetOrderDetails.json").bufferedReader().use {
+//            it.readText()
+//        }
+//        val listType = object : TypeToken<OrderDetailModel>() {}.type
+//        return gson.fromJson(jsonString, listType)
+//    }
 
     fun getOrderPlacedByUser(context: Context): ArrayList<CartModel> {
         val jsonString = context.assets.open("GetOrdersPlacedByUsers.json").bufferedReader().use {
@@ -60,5 +70,21 @@ class Utility {
         }
         val listType = object : TypeToken<OrderModel>() {}.type
         return  gson.fromJson(jsonString, listType)
+    }
+
+    fun getAddressDetails(context: Context): ArrayList<AddressModel> {
+        val jsonString = context.assets.open("Address.json").bufferedReader().use {
+            it.readText()
+        }
+        val listType = object : TypeToken<ArrayList<AddressModel>>() {}.type
+        return gson.fromJson(jsonString, listType)
+    }
+
+    fun getNotificationList(context: Context): ArrayList<NotificationItem> {
+        val jsonString = context.assets.open("Notification.json").bufferedReader().use {
+            it.readText()
+        }
+        val listType = object : TypeToken<ArrayList<NotificationItem>>() {}.type
+        return gson.fromJson(jsonString, listType)
     }
 }

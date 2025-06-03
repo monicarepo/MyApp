@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Monica",
+    "phone": "1234567890",
+    "addressLine": "8256 Gradington drive",
+    "city": "Westerville",
+    "zip": "43081"
+  },
+  {
+    "id": 2,
+    "name": "Shirly",
+    "phone": "9876543210",
+    "addressLine": "456 5th Avenue",
+    "city": "New York",
+    "zip": "10002"
+  },
+  {
+    "id": 3,
+    "name": "Rachel Green",
+    "phone": "5551234567",
+    "addressLine": "789 Madison Ave",
+    "city": "New York",
+    "zip": "10003"
+  },
+  {
+    "id": 4,
+    "name": "Joey Tribbiani",
+    "phone": "4449876543",
+    "addressLine": "1010 Broadway St",
+    "city": "Brooklyn",
+    "zip": "11201"
+  },
+  {
+    "id": 5,
+    "name": "Ross Geller",
+    "phone": "3332221111",
+    "addressLine": "321 Museum Row",
+    "city": "Manhattan",
+    "zip": "10004"
+  }
+]

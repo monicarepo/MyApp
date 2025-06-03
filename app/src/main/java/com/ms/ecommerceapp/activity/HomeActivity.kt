@@ -16,7 +16,7 @@ class HomeActivity: ComponentActivity() {
     var productList = ArrayList<ProductListModel>()
     var usersList = ArrayList<UserListModel>()
     var cartItems = ArrayList<CartModel>()
-    var orderDetails = OrderDetailModel()
+    var orderDetails = ArrayList<OrderDetailModel>()
     var orderDetailByUser = ArrayList<CartModel>()
     var newOrder = OrderModel()
 
@@ -55,7 +55,7 @@ class HomeActivity: ComponentActivity() {
 
     private fun getOrderDetails() {
         orderDetails = apiMockUtility.getOrderDetails(this)
-        println("getOrderDetails: ${orderDetails.totalPrice}")
+        println("getOrderDetails: ${orderDetails[0].totalPrice}")
     }
 
     private fun getOrderPlacedByUser() {

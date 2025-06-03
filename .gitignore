@@ -32,3 +32,6 @@ google-services.json
 # Android Profiling
 *.hprof
 /actions-runner
+app/.DS_Store
+.DS_Store
+*.txt

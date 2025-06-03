@@ -44,6 +44,7 @@ uiToolingPreviewAndroid = "1.8.0"
 junitKtx = "1.2.1"
 runtime = "1.0.0-alpha04"
 navigationComposeJvmstubs = "2.9.0"
+uiAndroid = "1.8.2"
 
 [libraries]
 androidx-core = { module = "androidx.test:core", version.ref = "androidXTestVersion" }
@@ -99,6 +100,7 @@ androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.
 androidx-runtime = { group = "androidx.xr.runtime", name = "runtime", version.ref = "runtime" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
+androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
