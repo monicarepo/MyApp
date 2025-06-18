@@ -115,6 +115,19 @@ fun MainScreen() {
             composable(Route.Dashboard.FAQ) {
                 FAQScreen(navController)
             }
+            composable("${Route.Dashboard.PRODUCT_DETAIL}/{productId}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId")
+                val selectedProduct = productList.find { it.productId.toString() == productId }
+
+                if (selectedProduct != null) {
+                    ProductDetailScreen(product = selectedProduct, navController = navController)
+                } else {
+                    // Optional: handle product not found case
+                }
+            }
+//            composable(Route.Dashboard.productDetail()) {
+//                ProductDetailScreen()
+//            }
         }
     }
 }

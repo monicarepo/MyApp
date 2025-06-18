@@ -34,6 +34,7 @@ fun FAQScreen(navController:NavHostController, faqUrl: String = "https://www.typ
                 WebView(context).apply {
                     webViewClient = WebViewClient()
                     settings.javaScriptEnabled = true
+                    settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                     loadUrl(faqUrl)
                 }
             },

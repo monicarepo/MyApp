@@ -31,5 +31,8 @@ object Route {
         const val ABOUT = "about"
         const val SUPPORT = "support"
         const val FAQ = "faq"
+        const val PRODUCT_DETAIL = "product_detail"
+        fun productDetail(productId: Int) = "$PRODUCT_DETAIL/$productId"
+
     }
 }

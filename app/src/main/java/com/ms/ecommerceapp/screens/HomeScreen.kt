@@ -2,11 +2,13 @@ package com.ms.ecommerceapp.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +25,11 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -82,7 +87,11 @@ fun HomeScreen(
         CategoryRow(selectedCategory = selectedCategory, onCategorySelected = {
             selectedCategory = it
         })
-        FeaturedProductList(filteredList)
+        FeaturedProductList(filteredList, onProductClick = { product ->
+            navController.navigate(Route.Dashboard.productDetail(product.productId ?: 0))
+        }, onAddToCartClick = {
+            // Add to cart Logic
+        })
     }
 }
 
@@ -188,7 +197,7 @@ fun Chip(text: String, isSelected: Boolean,  onSelectedChange: (Boolean) -> Unit
 
 
 @Composable
-fun FeaturedProductList(productList: List<ProductListModel>) {
+fun FeaturedProductList(productList: List<ProductListModel>, onProductClick: (ProductListModel) -> Unit, onAddToCartClick: () -> Unit) {
     if(productList.isEmpty()){
         Column(
             modifier = Modifier
@@ -213,7 +222,9 @@ fun FeaturedProductList(productList: List<ProductListModel>) {
                 ProductItem(
                     name = item.name ?: "product",
                     price = item.price.toString(),
-                    imageUrl = item.image
+                    imageUrl = item.image,
+                    onProductClick = { onProductClick(item) },
+                    onAddToCartClick = { onAddToCartClick() }
                 )
             }
         }
@@ -254,11 +265,25 @@ fun NetworkImageDemo() {
 }
 
 @Composable
-fun ProductItem(name: String, price: String, imageUrl: String?) {
-
-    Card(modifier = Modifier.fillMaxWidth()) {
+fun ProductItem(
+    name: String,
+    price: String,
+    imageUrl: String?,
+    onProductClick: () -> Unit,
+    onAddToCartClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 6.dp)
+            .clickable { onProductClick() },
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
@@ -267,7 +292,7 @@ fun ProductItem(name: String, price: String, imageUrl: String?) {
                     .crossfade(true)
                     .listener(
                         onError = { _, throwable ->
-                            Log.e("ImageLoad", "Failed: ${throwable.throwable.message}")
+                            Log.e("ImageLoad", "Failed: ${throwable.throwable?.message}")
                         },
                         onSuccess = { _, _ ->
                             Log.d("ImageLoad", "Loaded image successfully")
@@ -278,17 +303,85 @@ fun ProductItem(name: String, price: String, imageUrl: String?) {
                 placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
                 error = painterResource(id = R.drawable.ic_launcher_background),
                 modifier = Modifier
-                    .size(64.dp)
-                    .background(Color.LightGray),
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            Column {
-                Text(name, style = MaterialTheme.typography.titleSmall)
-                Text(price, style = AppTypography.bodyMedium, color = Color.Gray)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Text(name, style = MaterialTheme.typography.titleMedium, maxLines = 1)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(price, style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            ElevatedButton(
+                onClick = onAddToCartClick,
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                modifier = Modifier
+                    .defaultMinSize(minHeight = 36.dp)
+            ) {
+                Text("Add", style = MaterialTheme.typography.labelLarge)
             }
         }
     }
 }
+
+
+//@Composable
+//fun ProductItem(name: String, price: String, imageUrl: String?, onProductClick: () -> Unit) {
+//
+//    Card(modifier = Modifier.fillMaxWidth()
+//        .clickable { onProductClick() }
+//    ) {
+//        Row(
+//            modifier = Modifier.padding(16.dp),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            AsyncImage(
+//                model = ImageRequest.Builder(LocalContext.current)
+//                    .data(imageUrl ?: "https://picsum.photos/200")
+//                    .crossfade(true)
+//                    .listener(
+//                        onError = { _, throwable ->
+//                            Log.e("ImageLoad", "Failed: ${throwable.throwable.message}")
+//                        },
+//                        onSuccess = { _, _ ->
+//                            Log.d("ImageLoad", "Loaded image successfully")
+//                        }
+//                    )
+//                    .build(),
+//                contentDescription = name,
+//                placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
+//                error = painterResource(id = R.drawable.ic_launcher_background),
+//                modifier = Modifier
+//                    .size(64.dp)
+//                    .background(Color.LightGray),
+//                contentScale = ContentScale.Crop
+//            )
+//
+//            Spacer(modifier = Modifier.width(12.dp))
+//
+//            Column(
+//                modifier = Modifier
+//                .weight(1f)
+//            ) {
+//                Text(name, style = MaterialTheme.typography.titleSmall)
+//                Text(price, style = AppTypography.bodyMedium, color = Color.Gray)
+//                ElevatedButton(
+//                    onClick = onProductClick,
+//                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+//                    modifier = Modifier.defaultMinSize(minHeight = 32.dp)
+//                ) {
+//                    Text("Add to Cart", style = MaterialTheme.typography.labelLarge)
+//                }
+//            }
+//        }
+//    }
+//}

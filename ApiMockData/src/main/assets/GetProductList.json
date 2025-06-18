@@ -2,7 +2,7 @@
   {
     "product_id": 1,
     "name": "Smartphone",
-    "description": "High-end smartphone with advanced features.",
+    "description": "High-end smartphone with advanced features.High-end smartphone with advanced features.High-end smartphone with advanced features.High-end smartphone with advanced features.",
     "price": 599.99,
     "unit": "Piece",
     "image": "https://img.freepik.com/free-vector/mobile-phone-isolated-white-background_1284-47076.jpg?ga=GA1.1.1806448371.1748828235&semt=ais_hybrid&w=740",
@@ -84,7 +84,7 @@
     "discount": 10,
     "availability": true,
     "brand": "TechWear",
-    "category": "Wearables",
+    "category": "Electronics",
     "rating": 4.6,
     "reviews": [
       {
@@ -95,6 +95,16 @@
       {
         "user_id": 8,
         "rating": 5,
+        "comment": "Sleek design and accurate fitness tracking."
+      },
+      {
+        "user_id": 9,
+        "rating": 4.3,
+        "comment": "Great value for the features it offers."
+      },
+      {
+        "user_id": 10,
+        "rating": 4.5,
         "comment": "Sleek design and accurate fitness tracking."
       }
     ]
@@ -109,7 +119,7 @@
     "discount": 5,
     "availability": true,
     "brand": "PhotoPro",
-    "category": "Cameras",
+    "category": "Electronics",
     "rating": 4.9,
     "reviews": [
       {
@@ -184,7 +194,7 @@
     "discount": 10,
     "availability": true,
     "brand": "GameX",
-    "category": "Gaming",
+    "category": "Electronics",
     "rating": 4.8,
     "reviews": [
       {
@@ -257,7 +267,7 @@
   {
     "product_id": 13,
     "name": "Frock",
-    "description": "Frock",
+    "description": "High Quality Frock",
     "price": 599.99,
     "unit": "Piece",
     "image": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSoqh-PelPTuteYhuGDA9njephhylXBPbdHLr255V5MnIgKnvDYEzmSsQ_kF0FI3DO-oJeCpNZPAgpwaq3fiZ6kZvUt8r_PzULWTJtlv-W_G9Vwf5hovai_DQrndoj834480PHcwOc&usqp=CAc",
