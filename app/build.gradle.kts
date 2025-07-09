@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
 
 
     testImplementation(libs.hilt.android.testing)
@@ -89,6 +91,9 @@ dependencies {
     implementation(project(":appTheme"))
     implementation(project(":Authentication"))
     implementation(project(":ApiMockData"))
+    implementation(project(":FindLocation"))
+    implementation(project(":FaceDetector"))
+    implementation(project(":NetworkLibrary"))
     testImplementation(libs.junit)
     testImplementation(libs.androidx.core)
     testImplementation(libs.mockito.core)
